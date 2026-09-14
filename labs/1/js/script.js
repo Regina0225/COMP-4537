@@ -1,6 +1,6 @@
 import { MESSAGES } from "../lang/messages/en/user.js";
 
-// Created with assistance from ChatGPT. Make sure you can explain each line.
+// Created with assistance from AI
 
 class GameButton {
   constructor(number, color, gameArea) {
