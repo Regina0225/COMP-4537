@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 30px;
+}
+
+h1 {
+    color: #4a90e2;
+}
+
+#last-saved,
+#last-retrieved {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+}
+
+textarea {
+    display: block;
+    width: 300px;
+    height: 30px;
+    margin-bottom: 5px;
+}
+
+button {
+    margin-right: 5px;
+    background-color: #fabaf0;
+}
+
+#add-button {
+    background-color: #b540e8;
+    color: white;
+}
+
+.note {
+    margin-bottom: 15px;
+}
+
+#notes-container {
+    margin-top: 15px;
+}
+
+textarea {
+    background-color: rgb(234, 161, 193);
+}
