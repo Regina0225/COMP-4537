@@ -67,21 +67,11 @@ class Server {  // 서버 실행, 요청 분류
             this.handleRequest(req, res);
         });
 
-        server.listen(this.port, () => {
+        server.listen(this.port, "0.0.0.0", () => {
             console.log(`Server is running on port ${this.port}`);
         });
     }
 
-    // handleRequest(req, res) {
-    //     const url = new URL(req.url, `http://${req.headers.host}`);
-
-    //     if (url.pathname === "/getDate/") {
-    //         this.dateHandler.handle(url, res);
-    //     } else {
-    //         res.writeHead(404, { "Content-Type": "text/plain" });
-    //         res.end("404 Not Found");
-    //     }
-    // }
     handleRequest(req, res) {
     const url = new URL(req.url, `http://${req.headers.host}`);
 
@@ -104,5 +94,6 @@ class Server {  // 서버 실행, 요청 분류
 
 
 // Starter
-const server = new Server(8080);
+const port = process.env.PORT || 8080;
+const server = new Server(port);
 server.start();
