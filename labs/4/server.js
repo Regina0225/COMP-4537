@@ -1,10 +1,10 @@
 const http = require("http");
 const fs = require("fs");
+const path = require("path");
 const Utils = require("./modules/utils");
 const MESSAGES = require("./lang/en/en");
 
-
-class DateHandler { // getDate 요청 처리
+class DateHandler {
     constructor() {
         this.utils = new Utils();
     }
@@ -16,19 +16,19 @@ class DateHandler { // getDate 요청 처리
         const message = MESSAGES.greeting.replace("%1", name);
 
         res.writeHead(200, { "Content-Type": "text/html" });
-
-        res.end(
-            `<p style="color: blue;">${message} ${currentDate}</p>`
-        );
+        res.end(`<p style="color: blue;">${message} ${currentDate}</p>`);
     }
 }
 
-
 class FileHandler {
+    constructor() {
+        this.filePath = path.join(__dirname, "file.txt");
+    }
+
     writeFile(url, res) {
         const text = url.searchParams.get("text");
 
-        fs.appendFile("file.txt", text + "\n", (err) => {
+        fs.appendFile(this.filePath, text + "\n", (err) => {
             if (err) {
                 res.writeHead(500, { "Content-Type": "text/plain" });
                 res.end("Error writing to file");
@@ -41,7 +41,9 @@ class FileHandler {
     }
 
     readFile(filename, res) {
-        fs.readFile(filename, "utf8", (err, data) => {
+        const filePath = path.join(__dirname, filename);
+
+        fs.readFile(filePath, "utf8", (err, data) => {
             if (err) {
                 res.writeHead(404, { "Content-Type": "text/plain" });
                 res.end(`404: ${filename} not found`);
@@ -54,8 +56,7 @@ class FileHandler {
     }
 }
 
-
-class Server {  // 서버 실행, 요청 분류
+class Server {
     constructor(port) {
         this.port = port;
         this.dateHandler = new DateHandler();
@@ -73,27 +74,25 @@ class Server {  // 서버 실행, 요청 분류
     }
 
     handleRequest(req, res) {
-    const url = new URL(req.url, `http://${req.headers.host}`);
+        const url = new URL(req.url, `http://${req.headers.host}`);
 
-    if (url.pathname === "/COMP4537/labs/4/getDate/") {
-        this.dateHandler.handle(url, res);
+        if (url.pathname === "/COMP4537/labs/4/getDate/") {
+            this.dateHandler.handle(url, res);
 
-    } else if (url.pathname === "/writeFile/") {
-        this.fileHandler.writeFile(url, res);
+        } else if (url.pathname === "/COMP4537/labs/4/writeFile/") {
+            this.fileHandler.writeFile(url, res);
 
-    } else if (url.pathname.startsWith("/readFile/")) {
-        const filename = url.pathname.split("/").pop();
-        this.fileHandler.readFile(filename, res);
+        } else if (url.pathname.startsWith("/COMP4537/labs/4/readFile/")) {
+            const filename = url.pathname.split("/").pop();
+            this.fileHandler.readFile(filename, res);
 
-    } else {
-        res.writeHead(404, { "Content-Type": "text/plain" });
-        res.end("404 Not Found");
+        } else {
+            res.writeHead(404, { "Content-Type": "text/plain" });
+            res.end("404 Not Found");
+        }
     }
 }
-}
 
-
-// Starter
 const port = process.env.PORT || 8080;
 const server = new Server(port);
 server.start();
